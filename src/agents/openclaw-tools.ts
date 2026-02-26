@@ -20,6 +20,7 @@ import { createSessionsSendTool } from "./tools/sessions-send-tool.js";
 import { createSessionsSpawnTool } from "./tools/sessions-spawn-tool.js";
 import { createSubagentsTool } from "./tools/subagents-tool.js";
 import { createTtsTool } from "./tools/tts-tool.js";
+import { createSecretsTool } from "./tools/secrets-tool.js";
 import { createWebFetchTool, createWebSearchTool } from "./tools/web-tools.js";
 import { resolveWorkspaceRoot } from "./workspace-dir.js";
 
@@ -124,6 +125,9 @@ export function createOpenClawTools(options?: {
     ...(messageTool ? [messageTool] : []),
     createTtsTool({
       agentChannel: options?.agentChannel,
+      config: options?.config,
+    }),
+    createSecretsTool({
       config: options?.config,
     }),
     createGatewayTool({

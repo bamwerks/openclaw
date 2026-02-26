@@ -108,6 +108,48 @@ export type OpenClawConfig = {
   talk?: TalkConfig;
   gateway?: GatewayConfig;
   memory?: MemoryConfig;
+  secrets?: SecretsConfig;
+  security?: SecurityConfig;
+};
+
+export type SecretTier = "open" | "controlled" | "restricted";
+
+export type SecretRegistryEntry = {
+  name: string;
+  tier: SecretTier;
+  description?: string;
+  ttl?: number;
+  type?: string;           // e.g., "api_key", "github_pat", "ssh_key"
+  hint?: string;           // Human-readable description for agent
+  capabilities?: string[]; // What this secret can do (OAuth scopes, etc.)
+};
+
+export type SecretsConfig = {
+  /** Secret definitions with tier-based access control. */
+  registry?: SecretRegistryEntry[];
+  /** Directory for grant files. Defaults to {dataDir}/grants/. */
+  grantsDir?: string;
+  /** Keychain service name. Defaults to "openclaw-secrets". */
+  keychainService?: string;
+  /** Vault backend type. Defaults to "keychain". */
+  backend?: "keychain" | "1password" | "bitwarden" | "vault";
+};
+
+export type SecurityCredentialMode = "legacy" | "yolo" | "balanced" | "strict";
+
+export type SecurityConfig = {
+  credentials?: {
+    /** Security mode for credential access. Default: "legacy". */
+    mode?: SecurityCredentialMode;
+    broker?: {
+      /** Enable credential broker for tool execution interception. */
+      enabled?: boolean;
+      /** Tools to intercept for credential injection. */
+      interceptTools?: string[];
+      /** Per-tool credential allowlists. Keys are tool names, values are allowed secret names. */
+      toolAllowedSecrets?: Record<string, string[]>;
+    };
+  };
 };
 
 export type ConfigValidationIssue = {

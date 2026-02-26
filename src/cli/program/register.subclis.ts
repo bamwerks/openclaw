@@ -287,6 +287,24 @@ const entries: SubCliEntry[] = [
       mod.registerCompletionCli(program);
     },
   },
+  {
+    name: "secrets",
+    description: "Manage secrets with OS keychain backing and TOTP approval",
+    hasSubcommands: true,
+    register: async (program) => {
+      const mod = await import("../secrets-cli.js");
+      mod.registerSecretsCli(program);
+    },
+  },
+  {
+    name: "elevate",
+    description: "TOTP-gated elevated access for privileged operations",
+    hasSubcommands: false,
+    register: async (program) => {
+      const mod = await import("../elevate-cli.js");
+      mod.registerElevateCli(program);
+    },
+  },
 ];
 
 export function getSubCliEntries(): SubCliEntry[] {

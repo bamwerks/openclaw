@@ -655,6 +655,46 @@ export const OpenClawSchema = z
       .strict()
       .optional(),
     memory: MemorySchema,
+    secrets: z
+      .object({
+        registry: z
+          .array(
+            z.object({
+              name: z.string(),
+              tier: z.enum(["open", "controlled", "restricted"]),
+              description: z.string().optional(),
+              ttl: z.number().optional(),
+              type: z.string().optional(),
+              hint: z.string().optional(),
+              capabilities: z.array(z.string()).optional(),
+            }),
+          )
+          .optional(),
+        grantsDir: z.string().optional(),
+        keychainService: z.string().optional(),
+        backend: z.enum(["keychain", "1password", "bitwarden", "vault"]).optional().default("keychain"),
+      })
+      .strict()
+      .optional(),
+    security: z
+      .object({
+        credentials: z
+          .object({
+            mode: z.enum(["legacy", "yolo", "balanced", "strict"]).optional().default("legacy"),
+            broker: z
+              .object({
+                enabled: z.boolean().optional(),
+                interceptTools: z.array(z.string()).optional(),
+                toolAllowedSecrets: z.record(z.string(), z.array(z.string())).optional(),
+              })
+              .strict()
+              .optional(),
+          })
+          .strict()
+          .optional(),
+      })
+      .strict()
+      .optional(),
     skills: z
       .object({
         allowBundled: z.array(z.string()).optional(),

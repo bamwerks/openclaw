@@ -16,6 +16,13 @@ import {
 } from "./pi-tools.before-tool-call.js";
 import { normalizeToolName } from "./tool-policy.js";
 import { jsonResult } from "./tools/common.js";
+import { CredentialBroker } from "../secrets/credential-broker.js";
+
+let _credentialBroker: CredentialBroker | null = null;
+function getCredentialBroker(): CredentialBroker {
+  if (!_credentialBroker) _credentialBroker = new CredentialBroker();
+  return _credentialBroker;
+}
 
 type AnyAgentTool = AgentTool;
 
@@ -160,6 +167,11 @@ export function toToolDefinitions(tools: AnyAgentTool[]): ToolDefinition[] {
               throw new Error(hookOutcome.reason);
             }
             executeParams = hookOutcome.params;
+          }
+          // Credential broker injection (agent-blind credentials)
+          const broker = getCredentialBroker();
+          if (broker.isEnabled(name)) {
+            executeParams = await broker.inject(name, executeParams as Record<string, unknown>);
           }
           const rawResult = await tool.execute(toolCallId, executeParams, signal, onUpdate);
           const result = normalizeToolExecutionResult({
