@@ -24,7 +24,7 @@ import {
 import { generateTotp, validateTotp } from "./totp.js";
 import { randomBytes } from "node:crypto";
 import { createVaultBackend, type VaultBackend } from "./vault-backend.js";
-import { auditLog } from "./audit.js";
+import { auditLog } from "./audit-log.js";
 
 // Re-export types for convenience
 export type { SecretDefinition, SecretTier, GrantInfo };

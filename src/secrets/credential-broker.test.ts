@@ -12,7 +12,7 @@ vi.mock("./index.js", () => ({
 }));
 
 // Mock auditLog to avoid file writes
-vi.mock("./audit.js", () => ({
+vi.mock("./audit-log.js", () => ({
   auditLog: vi.fn(),
 }));
 

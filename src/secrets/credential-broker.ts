@@ -10,7 +10,7 @@
 import type { OpenClawConfig } from "../config/config.js";
 import { loadConfig } from "../config/config.js";
 import { getSecret } from "./index.js";
-import { auditLog } from "./audit.js";
+import { auditLog } from "./audit-log.js";
 
 /**
  * Resolved credential reference.
